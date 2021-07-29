@@ -3,7 +3,7 @@
 ## Dependencies
 
 * sratoolkit
-* fatsqc
+* fastqc
 * multiqc
 * trimmomatic
 * hisat2
@@ -32,7 +32,8 @@ do
 done
 ```
 ## Quality analysis
-
+* fastqc * is a module that checks the quality of the raw reads from high throughput sequencing platforms like Illumina.It provides a html report summary of the quality of reads in graphs and tables.This makes you aware of the quality of reads for downstream analysis.
+* multiqc * this is a module that makes fastqc output more manageable by compiling them and generating one report.
 
 looping through the rawdata to do quality check and combining the reports using multiqc
 ```
