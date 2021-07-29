@@ -32,10 +32,9 @@ do
 done
 ```
 ## Quality analysis
-* fastqc * is a module that checks the quality of the raw reads from high throughput sequencing platforms like Illumina.It provides a html report summary of the quality of reads in graphs and tables.This makes you aware of the quality of reads for downstream analysis.
-* multiqc * this is a module that makes fastqc output more manageable by compiling them and generating one report.
+**fastqc** checks the quality of the raw reads from high throughput sequencing platforms like Illumina.It provides a html report summary of the quality of reads in graphs and tables.This makes you aware of the quality of reads for downstream analysis.
+**multiqc** makes fastqc output more manageable by compiling them and generating one report.
 
-looping through the rawdata to do quality check and combining the reports using multiqc
 ```
 mkdir rawfastqc
 cd rawfastqc
@@ -45,9 +44,12 @@ do
 done
 multiqc ./
 ```
-Trimming
+## Trimming
+low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a commandline tool used to trim and crop reads. 
+
 ```
-for i in *_1.fastq.gz
+#basename is a command that strips trailing suffix in a file name
+for i in *_1.fastq.gz;
 do
     name=$(basename ${i} _1.fastq.gz)
     trimmomatic PE ${i} ${name}_2.fastq.gz\
@@ -56,7 +58,11 @@ do
                     HEADCROP:11
 done
 ```
-Mapping
+The trimmed reads are then checked for quality.
+## Mapping
+RNA Seq reads are mapped to the reference genome.**hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an
+indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
+
 ```
 #Building a reference genome index
 #hisat2-build -p25 ./VectorBase-53_AgambiaePEST_AnnotatedCDSs.fasta  ../hisat-index/VectorBase-53_AgambiaePEST.idx
@@ -74,3 +80,7 @@ do
    rm Alignment_hisat/${i}_hisat.sam 
 done
 ```
+## Abundance estimation
+
+## Differential analysis
+## Gene ontology
