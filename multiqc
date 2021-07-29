@@ -1,8 +1,0 @@
-mkdir rafastqc
-cd rafastqc
-for i in `../*.gz`;
-do
-  	fastqc $i
-
-done
-multiqc ./
