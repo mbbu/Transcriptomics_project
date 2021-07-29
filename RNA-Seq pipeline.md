@@ -1,13 +1,25 @@
 
 # Codes
+## Dependencies
 
+* sratoolkit
+* fatsqc
+* multiqc
+* trimmomatic
+* hisat2
+* samtools
+* htseq
 
-Fetching rawdata from NCBI
+## Fetching rawdata from NCBI
+
+**fastq-dump** is a tool in SRAtoolkit used for downloading sequencing reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
 
 Getting the data one data-set at a time
 
+
 ```
 fastq-dump --gzip --split-files <Accession number>
+fastq-dump --gzip --split-files SRR9987839
 ```
 Getting all data at once
 ```
@@ -19,11 +31,13 @@ do
     fastq-dump --gzip --split-files $i  #fastq-dump gets data in fastq format
 done
 ```
-Quality analysis
+## Quality analysis
+
+
 looping through the rawdata to do quality check and combining the reports using multiqc
 ```
-mkdir rafastqc
-cd rafastqc
+mkdir rawfastqc
+cd rawfastqc
 for i in `../*.gz`;
 do
   	fastqc $i
