@@ -44,6 +44,7 @@ do
 done
 multiqc ./
 ```
+
 ## Trimming
 low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a commandline tool used to trim and crop reads. 
 
