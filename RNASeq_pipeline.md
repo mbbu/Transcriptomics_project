@@ -9,6 +9,12 @@
 * hisat2
 * samtools
 * htseq
+## Create a conda environment & load modules
+```
+conda create --env Anopheles
+conda activate Anopheles
+module load <name of the module>
+```
 
 ## Fetching raw data from NCBI
 
