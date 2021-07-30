@@ -82,8 +82,14 @@ done
 ```
 ## Abundance estimation
 
+Once you have your aligned reads and a gff file ,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
+```
 htseq-count -t CDS -i ID -f bam SRR9987840_hisat_sorted.bam VectorBase-53_AgambiaePEST.gff
-
+```
 
 ## Differential analysis
-## Gene ontology
+
+Differential analysis involves using read counts to perform statistical analysis to discover quantitative changes in gene expression levels between experimental groups;exposed and non-exposed.**DESeq2** is used for differential analysis. 
+
+ 
+
