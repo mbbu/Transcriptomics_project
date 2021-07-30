@@ -12,7 +12,7 @@
 
 ## Fetching raw data from NCBI
 
-**fastq-dump** is a tool in SRAtoolkit used for downloading sequencing reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
+**fastq-dump** is a tool in SRAtoolkit used for downloading sequenced reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
 
 Getting the data one data-set at a time
 
