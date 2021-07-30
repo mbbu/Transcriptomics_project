@@ -1,6 +1,6 @@
 # Anopheles project
 ## Transcriptomic response of *An. gambiae s.s* mosquito larvae to Curry tree (Murraya koenigii) phytochemicals by Mang’era et.al
-Curry tree leaf extract pytochemicals are shown to disrupt growth and development of An.gambiae by inducing morphogenetic abnormalities,reducing locomotion and delaying pupation.
+Curry tree leaf extract pytochemicals are shown to disrupt growth and development of *An.gambiae* by inducing morphogenetic abnormalities,reducing locomotion and delaying pupation.
 * Question
 
 Which transcriptional process in the larvae underpins the above phenotype in the mosquito?
