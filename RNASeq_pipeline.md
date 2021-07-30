@@ -1,5 +1,5 @@
 
-# Codes
+# Bioinformatics analysis
 ## Dependencies
 
 * sratoolkit
