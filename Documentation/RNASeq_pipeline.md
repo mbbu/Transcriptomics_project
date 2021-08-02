@@ -18,6 +18,13 @@ module load <name of the module>
 ```
 
 ## Fetching raw data from NCBI
+The first step is to download the accession list into a txt file from the command line using **esearch**
+```
+esearch -db sra -query PRJNA560504 | efetch --format runinfo | cut -d "," -f 1 > SraAccList.txt
+# esearch command uses the ESearch utility to search on the NCBI database for query and finds the unique identifiers for all query that match the search query.
+#-db database
+#efetch downloads selected records in a style designated by -format
+```
 
 **fastq-dump** is a tool in SRAtoolkit used for downloading sequenced reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
 
