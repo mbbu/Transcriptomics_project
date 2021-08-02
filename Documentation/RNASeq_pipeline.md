@@ -2,13 +2,14 @@
 # Bioinformatics analysis
 ## Dependencies
 
-* sratoolkit
-* fastqc
-* multiqc
-* trimmomatic
-* hisat2
-* samtools
-* htseq
+* sratoolkit/2.9
+* fastqc/0.11.9
+* multiqc/1.4
+* trimmomatic/0.39
+* hisat2/2.2.1
+* samtools/1.9
+* htseq/0.13.5
+* star/2.7.6a
 ## Create a conda environment & load modules
 ```
 conda create --env Anopheles
