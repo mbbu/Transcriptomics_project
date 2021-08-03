@@ -80,7 +80,7 @@ HEADCROP -removes the first 11 bases of the reads
 ```
 The trimmed reads are then checked for quality.
 ## Mapping
-RNA Seq reads are mapped to the reference genome preferably using a splice aware aligner like **hisat** or **STAR**. 
+RNA Seq reads are mapped to the reference genome preferably using a splice aware aligner like **hisat** or **STAR**.   
 **hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
 
 ```
@@ -100,7 +100,7 @@ do
    rm Alignment_hisat/${i}_hisat.sam 
 done
 ```
-**OUTPUT**
+### Output
 
 Unfornately our overall alignment rate for each of the datasets was barely 50% as shown below,
 ```
@@ -109,9 +109,20 @@ SRR9987839 -49.69% overall alignment rate
 SRR9987840 -49.46% overall alignment rate
 SRR9987841 -36.97% overall alignment rate
 ```
-We went ahead to troubleshoot the cause of the poor alignment rate by using different reference genome and consequently a different aligner.We choose one data set (SRR9987840) for the alignment.
+#### Troubleshooting
 
-First we used VectorBase-53_AgambiaePEST_Genome.fasta as the reference and aligned the reads using hisat2.The  overall alignment rate was 83% .We then used STAR to align the reads with the same reference genome and the overall alignment rate was 86% .We therefore chose STAR for mapping all data sets.
+We choose one data set (SRR9987840) for troubleshooting.
+
+* Step 1
+
+Use a different reference genome; VectorBase-53_AgambiaePEST_Genome.fasta.   
+The  overall alignment rate rose to 83%
+
+* Step 2
+
+Use a different aligner; STAR.    
+The overall alignment rate was 86%
+
 
 **STAR Aligner**(Spliced Transcripts Alignment to a Reference)
 
@@ -147,7 +158,7 @@ done
 
 Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
 ```
-htseq-count -t gene -i gene_id -f bam SRR9987840_hisat_sorted.bam VectorBase-53_AgambiaePEST.gff
+htseq-count -t gene -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff >
 ```
 
 ## Differential analysis
