@@ -25,7 +25,7 @@ esearch -db sra -query PRJNA560504 | efetch --format runinfo | cut -d "," -f 1 >
 #-db database
 #efetch downloads selected records in a style designated by -format
 ```
-
+Once you have the accession list,the next step is to download the data.
 **fastq-dump** is a tool in SRAtoolkit used for downloading sequenced reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
 
 Getting the data one data-set at a time
@@ -60,8 +60,10 @@ multiqc ./
 ```
 
 ## Trimming
-low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a commandline tool used to trim and crop reads. 
-
+low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a  Java executable software used to trim and crop reads. 
+```
+java -jar <path to trimmomatic.jar> PE <input 1> <input 2>] <paired output 1> <unpaired output 1> <paired output 2> <unpaired output 2> <options>
+```
 ```
 #basename is a command that strips trailing suffix in a file name
 for i in *_1.fastq.gz;
@@ -72,11 +74,14 @@ do
                     ${name}_2.trim.fastq.gz ${name}_2un.trim.fastq.gz \
                     HEADCROP:11
 done
+PE - paired end
+HEADCROP -removes the first 11 bases of the reads
+
 ```
 The trimmed reads are then checked for quality.
 ## Mapping
-RNA Seq reads are mapped to the reference genome.**hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an
-indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
+RNA Seq reads are mapped to the reference genome preferably using a splice aware aligner like **hisat** or **STAR**. 
+**hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
 
 ```
 #Building a reference genome index
@@ -88,18 +93,61 @@ for i in $(cat ../SraAccList.txt);
 do
    echo ${i}
    hisat2 -p25 -x ../hisat-index/VectorBase-53_AgambiaePEST.idx\
-               -1 ${i}_1.fastq.gz -2 ${i}_2.fastq.gz\
+               -1 ${i}_1.trim.fastq.gz -2 ${i}_2.trim.fastq.gz\
                -S Alignment_hisat/${i}_hisat.sam
    samtools view -Sb Alignment_hisat/${i}_hisat.sam  | samtools sort  > Alignment_hisat/${i}_hisat_sorted.bam
    samtools index Alignment_hisat/${i}_hisat_sorted.bam
    rm Alignment_hisat/${i}_hisat.sam 
 done
 ```
+**OUTPUT**
+
+Unfornately our overall alignment rate for each of the datasets was barely 50% as shown below,
+```
+SRR9987838 -50.70% overall alignment rate
+SRR9987839 -49.69% overall alignment rate
+SRR9987840 -49.46% overall alignment rate
+SRR9987841 -36.97% overall alignment rate
+```
+We went ahead to troubleshoot the cause of the poor alignment rate by using different reference genome and consequently a different aligner.We choose one data set (SRR9987840) for the alignment.
+
+First we used VectorBase-53_AgambiaePEST_Genome.fasta as the reference and aligned the reads using hisat2.The  overall alignment rate was 83% .We then used STAR to align the reads with the same reference genome and the overall alignment rate was 86% .We therefore chose STAR for mapping all data sets.
+
+**STAR Aligner**(Spliced Transcripts Alignment to a Reference)
+
+STAR is a splice aware aligner designed to specifically address many of the challenges of RNA-seq data.It shows high accuracy and mapping speed.Alignemnt in STAR involves two steps;
+
+1. Creating genome index
+```
+STAR --runThreadN 6  # number of threads\
+    --runMode genomeGenerate \
+    --genomeDir ./starr #path to store genome indices\
+    --genomeFastaFiles VectorBase-53_AgambiaePEST_Genome.fasta \
+    --sjdbGTFfile VectorBase-53_AgambiaePEST.gff \
+    --sjdbOverhang 87 #readlength-1 --sjdbGTFtagExonParentTranscript gene
+```
+
+2. Mapping reads to the genome
+```
+mkdir alignments
+for i in $(cat acclist.txt);
+do
+    STAR --genomeDir starr \
+    --readFilesIn  ${i}_1.fastq.gz ${i}_2.fastq.gz\
+    --readFilesCommand zcat  \
+    --outSAMtype BAM SortedByCoordinate \
+    --quantMode GeneCounts \
+    --outFileNamePrefix alignments/${i}
+done
+#zcat uncompresses the files
+
+```
+
 ## Abundance estimation
 
-Once you have your aligned reads and a gff file ,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
+Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
 ```
-htseq-count -t CDS -i ID -f bam SRR9987840_hisat_sorted.bam VectorBase-53_AgambiaePEST.gff
+htseq-count -t gene -i gene_id -f bam SRR9987840_hisat_sorted.bam VectorBase-53_AgambiaePEST.gff
 ```
 
 ## Differential analysis
