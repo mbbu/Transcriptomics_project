@@ -4,11 +4,5 @@ In this project we are working on reproducing results from a research paper by M
 RNA was isolated and sequenced using Illumina Hiseq platform.Overall four transcriptome sequences were generated from the samples (two each for control and exposed larvae).We will be documenting the RNA Seq analysis workflow used to reproduce the findings.
 
 ### RNA analysis workflow 
-* Fetching the raw data
-* Quality analysis
-* Trimming 
-* Quality analysis of trimmed reads
-* Mapping 
-* Abundance estimation
-* Differential analysis
 
+![image](https://bioinformaticsworkbook.org/dataAnalysis/RNA-Seq/RNA-SeqIntro/Assets/RNAseq_1.png)
