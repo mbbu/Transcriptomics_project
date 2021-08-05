@@ -158,7 +158,7 @@ done
 
 Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
 ```
-htseq-count -t gene -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff >
+htseq-count -t gene -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff > htse/counts.txt
 ```
 
 ## Differential analysis
