@@ -58,6 +58,7 @@ do
 done
 multiqc ./
 ```
+![image](https://drive.google.com/uc?export=view&id=1WGZUvOHSZXobBbo305dQou5cMSNdgNun)
 
 ## Trimming
 low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a  Java executable software used to trim and crop reads. 
