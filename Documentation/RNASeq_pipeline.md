@@ -87,12 +87,13 @@ The trimmed reads are then checked for quality.
 
 
 ## Mapping
-RNA Seq reads are mapped to the reference genome preferably using a splice aware aligner like **hisat** or **STAR**.   
 **hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
 
 ```
+wget https://vectorbase.org/common/downloads/Current_Release/AgambiaePEST/fasta/data/VectorBase-53_AgambiaePEST_AnnotatedCDSs.fasta
+
 #Building a reference genome index
-#hisat2-build -p25 ./VectorBase-53_AgambiaePEST_AnnotatedCDSs.fasta  ../hisat-index/VectorBase-53_AgambiaePEST.idx
+hisat2-build -p25 ./VectorBase-53_AgambiaePEST_AnnotatedCDSs.fasta  ../hisat-index/VectorBase-53_AgambiaePEST.idx
 
 #Run hisat2 using indexed reference
 mkdir Alignment_hisat
@@ -125,6 +126,9 @@ We choose one data set (SRR9987840) for troubleshooting.
 Use a different reference genome; VectorBase-53_AgambiaePEST_Genome.fasta.   
 The  overall alignment rate rose to 83%
 
+![image](https://drive.google.com/uc?export=view&id=1BAgqFHGlRBpc0dIsHD34AUIoPbCcH6La)
+
+
 * Step 2
 
 Use a different aligner; STAR.    
@@ -142,13 +146,13 @@ STAR --runThreadN 6  # number of threads\
     --genomeDir ./starr #path to store genome indices\
     --genomeFastaFiles VectorBase-53_AgambiaePEST_Genome.fasta \
     --sjdbGTFfile VectorBase-53_AgambiaePEST.gff \
-    --sjdbOverhang 87 #readlength-1 --sjdbGTFtagExonParentTranscript gene
+    --sjdbOverhang 99 #readlength-1 --sjdbGTFtagExonParentTranscript gene
 ```
 
 2. Mapping reads to the genome
 ```
 mkdir alignments
-for i in $(cat acclist.txt);
+for i in $(cat SraAcclist.txt);
 do
     STAR --genomeDir starr \
     --readFilesIn  ${i}_1.fastq.gz ${i}_2.fastq.gz\
@@ -157,16 +161,27 @@ do
     --quantMode GeneCounts \
     --outFileNamePrefix alignments/${i}
 done
-#zcat uncompresses the files
+#zcat decompress the files
 
+```
+### Output
+```
+SRR9987838 -86.83% overall alignment rate
+SRR9987839 -86.80% overall alignment rate
+SRR9987840 -85.57% overall alignment rate
+SRR9987841 -89.64% overall alignment rate
 ```
 
 ## Abundance estimation
 
 Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
 ```
-htseq-count -t gene -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff > htse/counts.txt
+htseq-count -t exon -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff > htseq/counts.txt
 ```
+### Output
+
+![image](https://drive.google.com/uc?export=view&id=11H3sS_UR2PY0yY_tLA8MoGh_Incr3BT2)
+
 
 ## Differential analysis
 
