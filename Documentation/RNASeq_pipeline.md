@@ -58,7 +58,7 @@ do
 done
 multiqc ./
 ```
-![image](https://drive.google.com/uc?export=view&id=1WGZUvOHSZXobBbo305dQou5cMSNdgNun)
+![image](https://drive.google.com/uc?export=view&id=1WGZUvOHSZXobBbo305dQou5cMSNdgNun) 
 
 ## Trimming
 low quality reads together with adapters are removed after quality assessment.**Trimmomatic** is a  Java executable software used to trim and crop reads. 
@@ -80,6 +80,12 @@ HEADCROP -removes the first 11 bases of the reads
 
 ```
 The trimmed reads are then checked for quality.
+
+![image](https://drive.google.com/uc?export=view&id=1s2scdPc_Es-1_qPEeqv8CVPoAjPLokUb) 
+
+![image](https://drive.google.com/uc?export=view&id=1fvmBuAmgn0kgQW2bRF3ZNOyoMpxoLV9M)
+
+
 ## Mapping
 RNA Seq reads are mapped to the reference genome preferably using a splice aware aligner like **hisat** or **STAR**.   
 **hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
