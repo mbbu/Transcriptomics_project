@@ -26,7 +26,7 @@ esearch -db sra -query PRJNA560504 | efetch --format runinfo | cut -d "," -f 1 >
 #efetch downloads selected records in a style designated by -format
 ```
 Once you have the accession list,the next step is to download the data.
-**fastq-dump** is a tool in SRAtoolkit used for downloading sequenced reads from NCBI Sequence Read Archive(SRA).The data is dowloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from Illumina platform.
+**fastq-dump** is a tool in SRAtoolkit used for downloading sequenced reads from NCBI Sequence Read Archive(SRA).The data is downloaded in fastq format.Here we are using the two options *--gzip* for compressing the sequence reads and *--split-files* to give both forward and reverse reads since the reads are from the Illumina platform.
 
 Getting the data one data-set at a time
 
@@ -46,7 +46,7 @@ do
 done
 ```
 ## Quality analysis
-**fastqc** checks the quality of the raw reads from high throughput sequencing platforms like Illumina.It provides a html report summary of the quality of reads in graphs and tables.This makes you aware of the quality of reads for downstream analysis.
+**fastqc** checks the quality of the raw reads from high throughput sequencing platforms like Illumina.It provides an HTML report summary of the quality of reads in graphs and tables. This makes you aware of the quality of reads for downstream analysis.
 **multiqc** makes fastqc output more manageable by compiling them and generating one report.
 
 ```
@@ -87,7 +87,7 @@ The trimmed reads are then checked for quality.
 
 
 ## Mapping
-**hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index.We use samtools to convert the output file from mapping to bam format and to index the bam files.Indexing creates a searchable index of sorted bam files required in some programs.
+**hisat2** is a fast and sensitive splice-aware aligner that compresses the genome using an indexing scheme to reduce the amount of space needed to store the genome. This also makes the genome quick to search, using a whole-genome index. We use samtools to convert the output file from mapping to bam format and to index the bam files. Indexing creates a searchable index of sorted bam files required in some programs.
 
 ```
 wget https://vectorbase.org/common/downloads/Current_Release/AgambiaePEST/fasta/data/VectorBase-53_AgambiaePEST_AnnotatedCDSs.fasta
@@ -110,7 +110,7 @@ done
 ```
 ### Output
 
-Unfornately our overall alignment rate for each of the datasets was barely 50% as shown below,
+Unfortunately, our overall alignment rate for each of the datasets was barely 50%, as shown below,
 ```
 SRR9987838 -50.70% overall alignment rate
 SRR9987839 -49.69% overall alignment rate
@@ -137,7 +137,7 @@ The overall alignment rate was 86%
 
 **STAR Aligner**(Spliced Transcripts Alignment to a Reference)
 
-STAR is a splice aware aligner designed to specifically address many of the challenges of RNA-seq data.It shows high accuracy and mapping speed.Alignemnt in STAR involves two steps;
+STAR is a splice aware aligner designed to address many of the challenges of RNA-seq data. It shows high accuracy and mapping speed. Alignment in STAR involves two steps;
 
 1. Creating genome index
 ```
@@ -174,7 +174,7 @@ SRR9987841 -89.64% overall alignment rate
 
 ## Abundance estimation
 
-Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature.A feature is an interval on a chromosome.
+Once you have your aligned reads,**htseq** is used to give counts of reads mapped to each feature. A feature is an interval on a chromosome.
 ```
 htseq-count -t exon -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_AgambiaePEST.gff > htseq/counts.txt
 ```
@@ -185,7 +185,7 @@ htseq-count -t exon -i gene_id -f bam *._hisat_sorted.bam  VectorBase-53_Agambia
 
 ## Differential analysis
 
-Differential analysis involves using read counts to perform statistical analysis to discover quantitative changes in gene expression levels between experimental groups;exposed and non-exposed.**DESeq2** is used for differential analysis. 
+The differential analysis involves using read counts to perform statistical analysis to discover quantitative changes in gene expression levels between experimental groups, exposed and non-exposed.**DESeq2** is used for differential analysis. 
 
  
 
